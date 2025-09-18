@@ -20,6 +20,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      lucide-vue:
+        specifier: ^0.517.0
+        version: 0.517.0(vue@3.5.21(typescript@5.8.3))
       lucide-vue-next:
         specifier: ^0.544.0
         version: 0.544.0(vue@3.5.21(typescript@5.8.3))
@@ -2292,6 +2295,12 @@ packages:
     resolution: {integrity: sha512-mDp/AdGOPIDkpFHnFiTWgQgCST9aBXHVaiobZfOMIvv7nrOukzF/TP+7KoOwrngdWRaH9TMiepMBIX1vsgKJ3g==}
     peerDependencies:
       vue: '>=3.0.1'
+
+  lucide-vue@0.517.0:
+    resolution: {integrity: sha512-ctSLCEslH5DchFq+/jku2cjQoBago2Q8EkK5i32hZaFVPV/6iUe1NjycwmIQLdprvEhnvNQxJbmEHUO5v41myw==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+    peerDependencies:
+      vue: ^2.6.12
 
   magic-regexp@0.10.0:
     resolution: {integrity: sha512-Uly1Bu4lO1hwHUW0CQeSWuRtzCMNO00CmXtS8N6fyvB3B979GOEEeAkiTUDsmbYLAbvpUS/Kt5c4ibosAzVyVg==}
@@ -5753,6 +5762,10 @@ snapshots:
       yallist: 3.1.1
 
   lucide-vue-next@0.544.0(vue@3.5.21(typescript@5.8.3)):
+    dependencies:
+      vue: 3.5.21(typescript@5.8.3)
+
+  lucide-vue@0.517.0(vue@3.5.21(typescript@5.8.3)):
     dependencies:
       vue: 3.5.21(typescript@5.8.3)
 

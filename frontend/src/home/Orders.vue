@@ -1,8 +1,91 @@
 <script setup lang="ts">
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+  CardDescription,
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { CardAction } from '@/components/ui/card'
+
+// icons
+import { CircleDollarSign } from 'lucide-vue-next'
+import { Clock8 } from 'lucide-vue-next'
+
+const orders = [
+  {
+    id: 1,
+    title: 'Order 1',
+    total_price: 100,
+    placed_at: '2021-01-01',
+    delivered_at: '2021-01-01',
+    cancelled_at: '2021-01-01',
+    image: 'https://done.ma/app/uploads/2025/05/cover-9-2048x856.png',
+  },
+  {
+    id: 2,
+    title: 'Order 2',
+    total_price: 200,
+    placed_at: '2021-01-01',
+    delivered_at: '2021-01-01',
+    cancelled_at: '2021-01-01',
+    image: 'https://done.ma/app/uploads/2025/05/cover-7-2048x856.png',
+  },
+  {
+    id: 3,
+    title: 'Order 3',
+    total_price: 300,
+    placed_at: '2021-01-01',
+    delivered_at: '2021-01-01',
+    cancelled_at: '2021-01-01',
+    image: 'https://done.ma/app/uploads/2025/04/darEnnaji-2048x1567.jpg',
+  },
+  {
+    id: 4,
+    title: 'Order 4',
+    total_price: 400,
+    placed_at: '2021-01-01',
+    delivered_at: '2021-01-01',
+    cancelled_at: '2021-01-01',
+    image: 'https://done.ma/app/uploads/2025/05/cover-8-2048x856.png',
+  },
+]
 </script>
 
 <template>
-  <div>
-    <h1>Orders</h1>
+  <div class="grid grid-cols-4 gap-4">
+    <Card v-for="order in orders" :key="order.id" class="p-0 overflow-hidden min-w-64 gap-0">
+      <CardHeader class="p-0 relative h-40 overflow-hidden">
+        <img :src="order.image" alt="Order" class="h-full w-full object-cover" />
+
+        <div
+          class="absolute bottom-0 w-full p-2 bg-gradient-to-t from-black to-transparent flex flex-col gap-1"
+        >
+          <CardTitle class="text-white">{{ order.title }}</CardTitle>
+          <CardDescription class="text-gray-100">New order</CardDescription>
+        </div>
+      </CardHeader>
+
+      <CardContent class="p-2 flex flex-col gap-2">
+        <div class="flex gap-1 items-center">
+          <CircleDollarSign class="size-4" />
+          <p class="text-sm">Total price: {{ order.total_price }} $</p>
+        </div>
+        <div class="flex gap-1 items-center">
+          <Clock8 class="size-4" />
+          <p class="text-sm">Placed at: {{ order.placed_at }}</p>
+        </div>
+      </CardContent>
+
+      <CardAction class="flex flex-col gap-2 p-2 w-full border-t">
+        <h1 class="text-sm">Mark as</h1>
+        <div class="flex gap-2 w-full">
+          <Button size="sm" class="bg-green-600 flex-1">Delivered</Button>
+          <Button size="sm" class="bg-red-600 flex-1">Cancelled</Button>
+        </div>
+      </CardAction>
+    </Card>
   </div>
 </template>
