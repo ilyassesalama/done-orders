@@ -1,11 +1,19 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Toaster } from '@/components/ui/sonner'
+import { Button } from '@/components/ui/button'
+import Home from '@/home/Home.vue'
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <Toaster />
+  <div class="flex flex-col h-screen">
+    <div class="flex items-center justify-center bg-[#f54e1e] p-4">
+      <h1 class="text-white text-xl font-bold">Done orders</h1>
+    </div>
+
+    <Home />
+
+  </div>
 </template>
 
 <style scoped></style>
