@@ -3,6 +3,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 use App\Controllers\OrderController;
 use App\Utils\ResponseUtil;
+use App\Utils\ValidationUtil;
 use Bramus\Router\Router;
 
 $router = new Router();
@@ -22,6 +23,27 @@ $router->get('/orders', function() use ($controller) {
 // create new order
 $router->post('/orders', function() use ($controller) {
     $data = json_decode(file_get_contents('php://input'), true);
+
+    ValidationUtil::validateOrderFields($data); // if validation fails, this will stop here
+
+    $title = $data['title'];
+    $total_price = $data['total_price'];
+    $image = $data['image'];
+    $placed_at = time();
+    $delivered_at = null;
+    $cancelled_at = null;
+    $status = 'new';
+
+    $data = [
+        'title' => $title,
+        'total_price' => $total_price,
+        'image' => $image,
+        'placed_at' => $placed_at,
+        'delivered_at' => $delivered_at,
+        'cancelled_at' => $cancelled_at,
+        'status' => $status,
+    ];
+
     $id = $controller->createOrder($data);
     ResponseUtil::json(['id' => $id], 201);
 });

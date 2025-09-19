@@ -3,7 +3,8 @@
   "type": "project",
   "require": {
     "kreait/firebase-php": "^7.21",
-    "bramus/router": "^1.6"
+    "bramus/router": "^1.6",
+    "ramsey/uuid": "^4.9"
   },
   "autoload": {
     "psr-4": {

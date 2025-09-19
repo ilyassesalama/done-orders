@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Firebase;
+use Ramsey\Uuid\Uuid;
 
 class OrderController {
     private $ordersPath = 'orders';
@@ -12,7 +13,10 @@ class OrderController {
     }
 
     public function createOrder($data) {
-        return $this->db->getReference($this->ordersPath)->push($data)->getKey();
+        $id = Uuid::uuid4();
+        $data['id'] = $id;
+        $this->db->getReference($this->ordersPath.'/'.$id)->set($data);
+        return $id;
     }
 
     public function updateOrderStatus($id, $data) {
