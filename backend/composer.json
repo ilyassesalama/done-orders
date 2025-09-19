@@ -1,0 +1,19 @@
+{
+  "name": "done/app",
+  "type": "project",
+  "require": {
+    "kreait/firebase-php": "^7.21",
+    "bramus/router": "^1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Ilyasse",
+      "email": "ilyassesalama7@gmail.com"
+    }
+  ]
+}
