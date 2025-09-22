@@ -8,21 +8,23 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { updateOrderStatus as updateOrderStatusApi, getOrders } from '@/lib/api'
+import { getOrders, updateOrderStatus as updateOrderStatusApi } from '@/lib/api'
 
 import { AnimatePresence, motion } from 'motion-v'
 import { onMounted, ref } from 'vue'
 
 import { useOrdersStore } from '@/stores/orders'
 
+// icons
+import { CircleDollarSign, Clock8, Loader2, PackageCheck, PackageX } from 'lucide-vue-next'
+
 const ordersStore = useOrdersStore()
 
 const loading = ref(false)
 const error = ref<string | null>(null)
 
-// icons
-import { CircleDollarSign, Clock8, PackageCheck, PackageX } from 'lucide-vue-next'
-
+const deliveredLoading = ref(new Set<string>())
+const cancelledLoading = ref(new Set<string>())
 
 // fetch orders if not already fetched
 onMounted(async () => {
@@ -38,12 +40,18 @@ onMounted(async () => {
   }
 })
 
-
 const updateOrderStatus = async (id: string, status: string) => {
+  const loadingSet = status === 'delivered' ? deliveredLoading.value : cancelledLoading.value
+
+  loadingSet.add(id)
   await updateOrderStatusApi(id, status)
-  await getOrders().then((orders) => {
-    ordersStore.setOrders(orders)
-  })
+  await getOrders()
+    .then((orders) => {
+      ordersStore.setOrders(orders)
+    })
+    .finally(() => {
+      loadingSet.delete(id)
+    })
 }
 </script>
 
@@ -89,18 +97,24 @@ const updateOrderStatus = async (id: string, status: string) => {
                 size="sm"
                 class="bg-green-600 flex-1 cursor-pointer"
                 @click="updateOrderStatus(order.id, 'delivered')"
+                :disabled="deliveredLoading.has(order.id)"
               >
-                <PackageCheck />
-                Delivered</Button
-              >
+                <template v-if="deliveredLoading.has(order.id)">
+                  <Loader2 class="animate-spin inline-block mr-1" /> Loading...
+                </template>
+                <template v-else> <PackageCheck class="inline-block mr-1" /> Delivered </template>
+              </Button>
               <Button
                 size="sm"
                 class="bg-red-600 flex-1 cursor-pointer"
                 @click="updateOrderStatus(order.id, 'cancelled')"
+                :disabled="cancelledLoading.has(order.id)"
               >
-                <PackageX />
-                Cancelled</Button
-              >
+                <template v-if="cancelledLoading.has(order.id)">
+                  <Loader2 class="animate-spin inline-block mr-1" /> Loading...
+                </template>
+                <template v-else> <PackageX class="inline-block mr-1" /> Cancelled </template>
+              </Button>
             </div>
           </CardAction>
         </Card>
