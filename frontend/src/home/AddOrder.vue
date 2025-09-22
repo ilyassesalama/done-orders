@@ -15,9 +15,9 @@ const createOrder = async () => {
   })
 }
 
-const title = ref('')
-const total_price = ref(0)
-const image = ref('')
+const title = ref<string>('')
+const total_price = ref<number | undefined>(undefined)
+const image = ref<string>('')
 
 const serverError = ref('')
 </script>
@@ -30,8 +30,8 @@ const serverError = ref('')
 
     <CardContent class="p-0 flex flex-col gap-4">
       <Input placeholder="Order title" v-model="title" />
-      <Input placeholder="Total price" v-model="total_price" />
-      <Input placeholder="Image url" v-model="image" />
+      <Input placeholder="Total price" v-model="total_price" type="number" />
+      <Input placeholder="Image url" v-model="image" type="url" />
 
       <p class="text-sm text-red-500">{{ serverError }}</p>
     </CardContent>
