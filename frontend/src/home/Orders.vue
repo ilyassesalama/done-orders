@@ -13,7 +13,7 @@ import { updateOrderStatus as updateOrderStatusApi } from '@/lib/api'
 import { AnimatePresence, motion } from 'motion-v'
 
 // icons
-import { CircleDollarSign, Clock8 } from 'lucide-vue-next'
+import { CircleDollarSign, Clock8, PackageCheck, PackageX } from 'lucide-vue-next'
 
 const props = defineProps<{
   orders: any[]
@@ -66,13 +66,17 @@ const updateOrderStatus = async (id: string, status: string) => {
                 size="sm"
                 class="bg-green-600 flex-1 cursor-pointer"
                 @click="updateOrderStatus(order.id, 'delivered')"
-                >Delivered</Button
+              >
+                <PackageCheck />
+                Delivered</Button
               >
               <Button
                 size="sm"
                 class="bg-red-600 flex-1 cursor-pointer"
                 @click="updateOrderStatus(order.id, 'cancelled')"
-                >Cancelled</Button
+              >
+                <PackageX />
+                Cancelled</Button
               >
             </div>
           </CardAction>

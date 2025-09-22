@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { createOrder as createOrderApi } from '@/lib/api'
+import { Plus, ListPlus } from 'lucide-vue-next'
 import { ref } from 'vue'
 
 const createOrder = async () => {
@@ -36,8 +37,15 @@ const serverError = ref('')
       <p class="text-sm text-red-500">{{ serverError }}</p>
     </CardContent>
 
-    <CardAction class="p-0 w-full">
-      <Button class="w-full cursor-pointer" size="sm" @click="createOrder">Add Order</Button>
+    <CardAction class="flex flex-col p-0 w-full gap-2">
+      <Button class="w-full cursor-pointer" size="sm" @click="createOrder">
+        <Plus class="size-4" />
+        Add Order</Button
+      >
+      <Button variant="outline" class="w-full cursor-pointer" size="sm">
+        <ListPlus class="size-4" />
+        Seed example orders</Button
+      >
     </CardAction>
   </Card>
 </template>
