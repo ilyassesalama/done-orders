@@ -6,6 +6,10 @@ import { createOrder as createOrderApi, seedExampleOrders as seedExampleOrdersAp
 import { ListPlus, Loader2, Plus } from 'lucide-vue-next'
 import { ref } from 'vue'
 
+const emit = defineEmits<{
+  handleOrderAdded: []
+}>()
+
 const createOrder = async () => {
   addingOrder.value = true
   await createOrderApi({
@@ -16,6 +20,7 @@ const createOrder = async () => {
     serverError.value = err.message ?? 'A server side error occurred'
   }).finally(() => {
     addingOrder.value = false
+    emit('handleOrderAdded')
   })
 }
 
@@ -25,6 +30,7 @@ const seedExampleOrders = async () => {
     serverError.value = err.message ?? 'A server side error occurred'
   }).finally(() => {
     seedingExampleOrders.value = false
+    emit('handleOrderAdded')
   })
 }
 
