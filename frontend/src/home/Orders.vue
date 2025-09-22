@@ -8,19 +8,42 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { updateOrderStatus as updateOrderStatusApi } from '@/lib/api'
+import { updateOrderStatus as updateOrderStatusApi, getOrders } from '@/lib/api'
 
 import { AnimatePresence, motion } from 'motion-v'
+import { onMounted, ref } from 'vue'
+
+import { useOrdersStore } from '@/stores/orders'
+
+const ordersStore = useOrdersStore()
+
+const loading = ref(false)
+const error = ref<string | null>(null)
 
 // icons
 import { CircleDollarSign, Clock8, PackageCheck, PackageX } from 'lucide-vue-next'
 
-const props = defineProps<{
-  orders: any[]
-}>()
+
+// fetch orders if not already fetched
+onMounted(async () => {
+  try {
+    loading.value = true
+    await getOrders().then((orders) => {
+      ordersStore.setOrders(orders)
+    })
+  } catch (err: any) {
+    error.value = err.message ?? 'Failed to fetch orders'
+  } finally {
+    loading.value = false
+  }
+})
+
 
 const updateOrderStatus = async (id: string, status: string) => {
   await updateOrderStatusApi(id, status)
+  await getOrders().then((orders) => {
+    ordersStore.setOrders(orders)
+  })
 }
 </script>
 
@@ -28,7 +51,7 @@ const updateOrderStatus = async (id: string, status: string) => {
   <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     <AnimatePresence mode="popLayout">
       <motion.div
-        v-for="order in props.orders"
+        v-for="order in ordersStore.orders"
         :key="order.id"
         layout
         :initial="{ scale: 0.8, opacity: 0 }"

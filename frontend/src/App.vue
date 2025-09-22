@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Toaster } from '@/components/ui/sonner'
-import { Button } from '@/components/ui/button'
 import Home from '@/home/Home.vue'
 </script>
 
@@ -10,9 +9,7 @@ import Home from '@/home/Home.vue'
     <div class="flex items-center justify-center bg-[#f54e1e] p-4">
       <h1 class="text-white text-xl font-bold">Done orders</h1>
     </div>
-
     <Home />
-
   </div>
 </template>
 
