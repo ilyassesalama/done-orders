@@ -8,7 +8,7 @@ use Bramus\Router\Router;
 
 // set CORS headers (this is too strict imo, but i added this to demonstrate how cors work)
 header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 $router = new Router();
@@ -20,9 +20,9 @@ $router->options('/.*', function () {
     exit();
 });
 
-// health check
+// root, hello everyone!
 $router->get('/', function () {
-    ResponseUtil::json(['message' => 'The API is working!']);
+    ResponseUtil::json(['message' => 'hello done!']);
 });
 
 // list all orders
@@ -60,7 +60,7 @@ $router->post('/orders', function () use ($controller) {
 });
 
 // check if order exists
-$router->get('/orders/([a-f0-9\-]+)/exists', function ($id) use ($controller) { // only allow hex values and -
+$router->get('/orders/([a-f0-9\-]+)/exists', function ($id) use ($controller) { // only allow hex values, numbers and -
     $exists = $controller->orderExists($id);
     ResponseUtil::success(['exists' => $exists]);
 });
@@ -68,24 +68,25 @@ $router->get('/orders/([a-f0-9\-]+)/exists', function ($id) use ($controller) { 
 // update order status
 $router->patch('/orders/([a-f0-9\-]+)', function ($id) use ($controller) {
     if (!isset($_GET['status'])) {
-        ResponseUtil::error('Status parameter is required');
+        ResponseUtil::error('Order status is required.');
     }
 
     $status = $_GET['status'];
 
     $allowedStatuses = ['delivered', 'cancelled'];
+
     if (!in_array($status, $allowedStatuses)) {
-        ResponseUtil::error('Invalid status. Allowed values: ' . implode(', ', $allowedStatuses));
+        ResponseUtil::error('Invalid order status.');
     }
 
     if (!$controller->orderExists($id)) {
-        ResponseUtil::error('Order not found', 404);
+        ResponseUtil::error('Order not found.', 404);
     }
 
     // just delete the order, no need to update the status, because why?
     $controller->deleteOrder($id);
 
-    ResponseUtil::json(['message' => 'Order status updated and deleted successfully']);
+    ResponseUtil::json(['message' => 'Order status updated and deleted successfully.']);
 });
 
 
@@ -164,7 +165,7 @@ $router->post('/orders/seed', function () use ($controller) {
         ];
     }
     ResponseUtil::json([
-        'message' => "Successfully seeded {$orderCount} random food orders",
+        'message' => "Successfully seeded {$orderCount} random food orders.",
         'orders' => $createdOrders
     ]);
 });
