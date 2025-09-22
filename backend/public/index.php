@@ -1,27 +1,30 @@
 <?php
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\OrderController;
 use App\Utils\ResponseUtil;
 use App\Utils\ValidationUtil;
 use Bramus\Router\Router;
 
+// set CORS headers
+header("Access-Control-Allow-Origin: *");
+
 $router = new Router();
 $controller = new OrderController();
 
 // health check
-$router->get('/', function() {
+$router->get('/', function () {
     ResponseUtil::json(['message' => 'The API is working!']);
 });
 
 // list all orders
-$router->get('/orders', function() use ($controller) {
+$router->get('/orders', function () use ($controller) {
     $orders = $controller->getOrders();
     ResponseUtil::success($orders);
 });
 
 // create new order
-$router->post('/orders', function() use ($controller) {
+$router->post('/orders', function () use ($controller) {
     $data = json_decode(file_get_contents('php://input'), true);
 
     ValidationUtil::validateOrderFields($data); // if validation fails, this will stop here
@@ -49,19 +52,19 @@ $router->post('/orders', function() use ($controller) {
 });
 
 // check if order exists
-$router->get('/orders/(\w+)/exists', function($id) use ($controller) {
+$router->get('/orders/(\w+)/exists', function ($id) use ($controller) {
     $exists = $controller->orderExists($id);
     ResponseUtil::success(['exists' => $exists]);
 });
 
 // update order status
-$router->patch('/orders/(\w+)', function($id) use ($controller) {
+$router->patch('/orders/(\w+)', function ($id) use ($controller) {
     if (!isset($_GET['status'])) {
         ResponseUtil::error('Status parameter is required');
     }
-    
+
     $status = $_GET['status'];
-    
+
     $allowedStatuses = ['delivered', 'cancelled'];
     if (!in_array($status, $allowedStatuses)) {
         ResponseUtil::error('Invalid status. Allowed values: ' . implode(', ', $allowedStatuses));
@@ -70,7 +73,7 @@ $router->patch('/orders/(\w+)', function($id) use ($controller) {
     if (!$controller->orderExists($id)) {
         ResponseUtil::error('Order not found', 404);
     }
-    
+
     $controller->updateOrderStatus($id, ['status' => $status]);
     ResponseUtil::json(['message' => 'Order status updated successfully']);
 });
