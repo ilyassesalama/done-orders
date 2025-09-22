@@ -15,33 +15,29 @@ class OrderController {
     public function createOrder($data) {
         $id = Uuid::uuid4();
         $data['id'] = $id;
-        $this->db->getReference($this->ordersPath.'/'.$id)->set($data);
+        $this->db->getReference($this->ordersPath . '/' . $id)->set($data);
         return $id;
     }
 
     public function updateOrderStatus($id, $data) {
-        $this->db->getReference($this->ordersPath.'/'.$id)->update($data);
+        $this->db->getReference($this->ordersPath . '/' . $id)->update($data);
     }
 
     public function getOrders() {
-        $ordersData = $this->db->getReference($this->ordersPath)->getValue();
-        
-        if (!$ordersData) {
-            return [];
-        }
-        
-        // remove null records
-        $validOrders = array_filter($ordersData);
+        $ordersData = $this->db->getReference($this->ordersPath)
+            ->orderByChild('status')
+            ->equalTo('new')
+            ->getValue();
 
-        return array_values($validOrders);
+        return array_values($ordersData);
     }
 
     public function getOrder($id) {
-        return $this->db->getReference($this->ordersPath.'/'.$id)->getValue();
+        return $this->db->getReference($this->ordersPath . '/' . $id)->getValue();
     }
 
     public function orderExists($id) {
-        $snapshot = $this->db->getReference($this->ordersPath.'/'.$id)->getSnapshot();
+        $snapshot = $this->db->getReference($this->ordersPath . '/' . $id)->getSnapshot();
         return $snapshot->exists();
     }
 }
