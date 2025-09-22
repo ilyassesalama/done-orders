@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Orders from '@/home/Orders.vue'
 import AddOrder from '@/home/AddOrder.vue'
+import Orders from '@/home/Orders.vue'
 
-import { ref, onMounted } from 'vue'
 import { getOrders } from '@/lib/api'
+import { onMounted, ref } from 'vue'
 const orders = ref<any[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)
