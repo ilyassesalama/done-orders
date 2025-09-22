@@ -1,4 +1,4 @@
-import { API_ORDERS_URL } from './endpoints'
+import { API_ORDERS_URL, API_SEED_EXAMPLE_ORDERS_URL } from './endpoints'
 
 const apiRequest = async (url: string, options?: RequestInit) => {
   const response = await fetch(url, options)
@@ -28,6 +28,15 @@ export const createOrder = async (order: any) => {
 export const updateOrderStatus = async (id: string, status: string) => {
   return apiRequest(`${API_ORDERS_URL}/${id}?status=${status}`, {
     method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+}
+
+export const seedExampleOrders = async () => {
+  return apiRequest(API_SEED_EXAMPLE_ORDERS_URL, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
