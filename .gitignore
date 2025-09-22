@@ -1,2 +1,3 @@
 .DS_Store
 /backend/vendor
+backend/src/firebase-service-account.json
