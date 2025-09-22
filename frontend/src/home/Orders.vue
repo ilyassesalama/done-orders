@@ -4,7 +4,6 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-  CardFooter,
   CardDescription,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -14,49 +13,14 @@ import { CardAction } from '@/components/ui/card'
 import { CircleDollarSign } from 'lucide-vue-next'
 import { Clock8 } from 'lucide-vue-next'
 
-const orders = [
-  {
-    id: 1,
-    title: 'Order 1',
-    total_price: 100,
-    placed_at: '2021-01-01',
-    delivered_at: '2021-01-01',
-    cancelled_at: '2021-01-01',
-    image: 'https://done.ma/app/uploads/2025/05/cover-9-2048x856.png',
-  },
-  {
-    id: 2,
-    title: 'Order 2',
-    total_price: 200,
-    placed_at: '2021-01-01',
-    delivered_at: '2021-01-01',
-    cancelled_at: '2021-01-01',
-    image: 'https://done.ma/app/uploads/2025/05/cover-7-2048x856.png',
-  },
-  {
-    id: 3,
-    title: 'Order 3',
-    total_price: 300,
-    placed_at: '2021-01-01',
-    delivered_at: '2021-01-01',
-    cancelled_at: '2021-01-01',
-    image: 'https://done.ma/app/uploads/2025/04/darEnnaji-2048x1567.jpg',
-  },
-  {
-    id: 4,
-    title: 'Order 4',
-    total_price: 400,
-    placed_at: '2021-01-01',
-    delivered_at: '2021-01-01',
-    cancelled_at: '2021-01-01',
-    image: 'https://done.ma/app/uploads/2025/05/cover-8-2048x856.png',
-  },
-]
+const props = defineProps<{
+  orders: any[]
+}>()
 </script>
 
 <template>
   <div class="grid grid-cols-4 gap-4">
-    <Card v-for="order in orders" :key="order.id" class="p-0 overflow-hidden min-w-64 gap-0">
+    <Card v-for="order in props.orders" class="p-0 overflow-hidden min-w-64 gap-0">
       <CardHeader class="p-0 relative h-40 overflow-hidden">
         <img :src="order.image" alt="Order" class="h-full w-full object-cover" />
 

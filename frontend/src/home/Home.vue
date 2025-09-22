@@ -2,6 +2,23 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Orders from '@/home/Orders.vue'
 import AddOrder from '@/home/AddOrder.vue'
+
+import { ref, onMounted } from 'vue'
+import { getOrders } from '@/lib/api'
+const orders = ref<any[]>([])
+const loading = ref(false)
+const error = ref<string | null>(null)
+
+onMounted(async () => {
+  try {
+    loading.value = true
+    orders.value = await getOrders()
+  } catch (err: any) {
+    error.value = err.message ?? 'Failed to fetch orders'
+  } finally {
+    loading.value = false
+  }
+})
 </script>
 
 <template>
@@ -13,7 +30,7 @@ import AddOrder from '@/home/AddOrder.vue'
       </TabsList>
 
       <TabsContent value="orders">
-        <Orders />
+        <Orders :orders="orders" />
       </TabsContent>
       <TabsContent value="add-order">
         <AddOrder />
