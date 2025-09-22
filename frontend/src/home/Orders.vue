@@ -25,7 +25,7 @@ const updateOrderStatus = async (id: string, status: string) => {
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-4">
+  <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     <AnimatePresence mode="popLayout">
       <motion.div
         v-for="order in props.orders"
@@ -36,7 +36,7 @@ const updateOrderStatus = async (id: string, status: string) => {
         :exit="{ scale: 0, opacity: 0 }"
         :transition="{ type: 'spring', stiffness: 300, damping: 25 }"
       >
-        <Card class="p-0 overflow-hidden min-w-64 gap-0">
+        <Card class="p-0 overflow-hidden sm:min-w-64 gap-0">
           <CardHeader class="p-0 relative h-40 overflow-hidden">
             <img :src="order.image" alt="Order" class="h-full w-full object-cover" />
 

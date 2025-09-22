@@ -24,15 +24,15 @@ onMounted(async () => {
 <template>
   <div class="p-4">
     <Tabs default-value="orders" class="w-full flex justify-center items-center">
-      <TabsList class="w-full max-w-md">
+      <TabsList class="w-full sm:max-w-md">
         <TabsTrigger value="orders"> Orders </TabsTrigger>
         <TabsTrigger value="add-order"> Add Order </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="orders">
+      <TabsContent value="orders" class="w-full max-w-7xl mx-auto">
         <Orders :orders="orders" />
       </TabsContent>
-      <TabsContent value="add-order">
+      <TabsContent value="add-order" class="w-full sm:max-w-md mx-auto">
         <AddOrder />
       </TabsContent>
     </Tabs>
