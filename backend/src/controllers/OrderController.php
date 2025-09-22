@@ -19,10 +19,6 @@ class OrderController {
         return $id;
     }
 
-    public function updateOrderStatus($id, $data) {
-        $this->db->getReference($this->ordersPath . '/' . $id)->update($data);
-    }
-
     public function getOrders() {
         $ordersData = $this->db->getReference($this->ordersPath)
             ->orderByChild('status')
@@ -39,5 +35,9 @@ class OrderController {
     public function orderExists($id) {
         $snapshot = $this->db->getReference($this->ordersPath . '/' . $id)->getSnapshot();
         return $snapshot->exists();
+    }
+
+    public function deleteOrder($id) {
+        $this->db->getReference($this->ordersPath . '/' . $id)->remove();
     }
 }

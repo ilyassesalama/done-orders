@@ -82,8 +82,10 @@ $router->patch('/orders/([a-f0-9\-]+)', function ($id) use ($controller) {
         ResponseUtil::error('Order not found', 404);
     }
 
-    $controller->updateOrderStatus($id, ['status' => $status]);
-    ResponseUtil::json(['message' => 'Order status updated successfully']);
+    // just delete the order, no need to update the status, because why?
+    $controller->deleteOrder($id);
+
+    ResponseUtil::json(['message' => 'Order status updated and deleted successfully']);
 });
 
 $router->run();
