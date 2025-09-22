@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from 'motion-v'
 import { onMounted, ref } from 'vue'
 
 import { useOrdersStore } from '@/stores/orders'
+import { formatDate } from '@/lib/utils'
 
 // icons
 import { CircleDollarSign, Clock8, Loader2, PackageCheck, PackageX } from 'lucide-vue-next'
@@ -86,7 +87,7 @@ const updateOrderStatus = async (id: string, status: string) => {
             </div>
             <div class="flex gap-1 items-center">
               <Clock8 class="size-4" />
-              <p class="text-sm">Placed at: {{ order.placed_at }}</p>
+              <p class="text-sm">Placed at: {{ formatDate(order.placed_at) }}</p>
             </div>
           </CardContent>
 

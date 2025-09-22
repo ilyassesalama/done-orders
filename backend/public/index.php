@@ -40,7 +40,7 @@ $router->post('/orders', function () use ($controller) {
     $title = $data['title'];
     $total_price = $data['total_price'];
     $image = $data['image'];
-    $placed_at = time();
+    $placed_at = time() * 1000;
     $delivered_at = null;
     $cancelled_at = null;
     $status = 'new';
@@ -95,7 +95,31 @@ $router->patch('/orders/([a-f0-9\-]+)', function ($id) use ($controller) {
 // seed random food orders
 $router->post('/orders/seed', function () use ($controller) {
     $foodItems = [
-        'Margherita Pizza','Cheeseburger','Caesar Salad','Chicken Tikka Masala','Sushi Roll','Fish & Chips','Beef Tacos','Pad Thai','Ramen Bowl','Greek Salad','BBQ Ribs','Chicken Wings','Steak Frites','Veggie Burger','Seafood Pasta','Butter Chicken','Korean BBQ','Fish Curry','Lamb Shawarma','Poke Bowl','Chicken Sandwich','Mushroom Risotto','Beef Burger','Grilled Salmon','Chicken Wrap'
+        'Margherita Pizza',
+        'Cheeseburger',
+        'Caesar Salad',
+        'Chicken Tikka Masala',
+        'Sushi Roll',
+        'Fish & Chips',
+        'Beef Tacos',
+        'Pad Thai',
+        'Ramen Bowl',
+        'Greek Salad',
+        'BBQ Ribs',
+        'Chicken Wings',
+        'Steak Frites',
+        'Veggie Burger',
+        'Seafood Pasta',
+        'Butter Chicken',
+        'Korean BBQ',
+        'Fish Curry',
+        'Lamb Shawarma',
+        'Poke Bowl',
+        'Chicken Sandwich',
+        'Mushroom Risotto',
+        'Beef Burger',
+        'Grilled Salmon',
+        'Chicken Wrap'
     ];
     $foodImages = [
         'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop',
@@ -112,8 +136,8 @@ $router->post('/orders/seed', function () use ($controller) {
         'https://done.ma/app/uploads/2025/04/darEnnaji-2048x1567.jpg',
         'https://thumbs.dreamstime.com/b/unhealthy-fast-food-delivery-menu-featuring-assorted-burgers-cheeseburgers-nuggets-french-fries-soda-high-calorie-low-356045884.jpg'
     ];
-    $statuses = ['new','delivered','cancelled'];
-    $currentTime = time();
+    $statuses = ['new', 'delivered', 'cancelled'];
+    $currentTime = time() * 1000;
     $orderCount = rand(15, 25);
     $createdOrders = [];
     for ($i = 0; $i < $orderCount; $i++) {
@@ -121,15 +145,15 @@ $router->post('/orders/seed', function () use ($controller) {
         $image = $foodImages[array_rand($foodImages)];
         $totalPrice = round(rand(15, 150) + (rand(0, 99) / 100), 2);
         $status = $statuses[array_rand($statuses)];
-        $placedAt = $currentTime - rand(0, 30 * 24 * 60 * 60);
+        $placedAt = $currentTime - rand(0, 30 * 24 * 60 * 60) * 1000;
         $orderData = [
             'title' => $title,
             'total_price' => $totalPrice,
             'image' => $image,
             'placed_at' => $placedAt,
             'status' => $status,
-            'delivered_at' => $status === 'delivered' ? $placedAt + rand(1 * 24 * 60 * 60, 7 * 24 * 60 * 60) : null,
-            'cancelled_at' => $status === 'cancelled' ? $placedAt + rand(1 * 24 * 60 * 60, 3 * 24 * 60 * 60) : null
+            'delivered_at' => $status === 'delivered' ? $placedAt + rand(1 * 24 * 60 * 60, 7 * 24 * 60 * 60) * 1000 : null,
+            'cancelled_at' => $status === 'cancelled' ? $placedAt + rand(1 * 24 * 60 * 60, 3 * 24 * 60 * 60) * 1000 : null
         ];
         $orderId = $controller->createOrder($orderData);
         $createdOrders[] = [
