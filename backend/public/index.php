@@ -6,11 +6,19 @@ use App\Utils\ResponseUtil;
 use App\Utils\ValidationUtil;
 use Bramus\Router\Router;
 
-// set CORS headers
-header("Access-Control-Allow-Origin: *");
+// set CORS headers (this is too strict imo, but i added this to demonstrate how cors work)
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 
 $router = new Router();
 $controller = new OrderController();
+
+// handle preflight OPTIONS requests for CORS
+$router->options('/.*', function () {
+    http_response_code(200);
+    exit();
+});
 
 // health check
 $router->get('/', function () {
@@ -52,13 +60,13 @@ $router->post('/orders', function () use ($controller) {
 });
 
 // check if order exists
-$router->get('/orders/(\w+)/exists', function ($id) use ($controller) {
+$router->get('/orders/([a-f0-9\-]+)/exists', function ($id) use ($controller) { // only allow hex values and -
     $exists = $controller->orderExists($id);
     ResponseUtil::success(['exists' => $exists]);
 });
 
 // update order status
-$router->patch('/orders/(\w+)', function ($id) use ($controller) {
+$router->patch('/orders/([a-f0-9\-]+)', function ($id) use ($controller) {
     if (!isset($_GET['status'])) {
         ResponseUtil::error('Status parameter is required');
     }

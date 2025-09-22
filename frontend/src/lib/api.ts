@@ -15,3 +15,13 @@ export const createOrder = async (order: any) => {
   });
   return response.json();
 };
+
+export const updateOrderStatus = async (id: string, status: string) => {
+  const response = await fetch(`${API_ORDERS_URL}/${id}?status=${status}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.json();
+};
