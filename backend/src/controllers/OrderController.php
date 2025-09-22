@@ -20,11 +20,14 @@ class OrderController {
     }
 
     public function getOrders() {
-        $ordersData = $this->db->getReference($this->ordersPath)
-            ->orderByChild('status')
-            ->equalTo('new')
-            ->getValue();
-
+        try {
+            $ordersData = $this->db->getReference($this->ordersPath)
+                ->orderByChild('status')
+                ->equalTo('new')
+                ->getValue();
+        } catch (\Exception $e) {
+            return [];
+        }
         return array_values($ordersData);
     }
 
