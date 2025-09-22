@@ -1,9 +1,9 @@
-import { API_ORDERS_URL } from './endpoints';
+import { API_ORDERS_URL } from './endpoints'
 
 export const getOrders = async () => {
-  const response = await fetch(API_ORDERS_URL);
-  return response.json();
-};
+  const response = await fetch(API_ORDERS_URL)
+  return response.json()
+}
 
 export const createOrder = async (order: any) => {
   const response = await fetch(API_ORDERS_URL, {
@@ -12,9 +12,9 @@ export const createOrder = async (order: any) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(order),
-  });
-  return response.json();
-};
+  })
+  return response.json()
+}
 
 export const updateOrderStatus = async (id: string, status: string) => {
   const response = await fetch(`${API_ORDERS_URL}/${id}?status=${status}`, {
@@ -22,6 +22,6 @@ export const updateOrderStatus = async (id: string, status: string) => {
     headers: {
       'Content-Type': 'application/json',
     },
-  });
-  return response.json();
-};
+  })
+  return response.json()
+}
