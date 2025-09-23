@@ -26,3 +26,5 @@ That's it! You can now access the app at `http://localhost:5173`.
 > }
 > ```
 > This is important to fetch orders by status.
+>
+> Additionally, you have to change the database URI in the `backend/src/Firebase.php` file to your own.
