@@ -41,14 +41,15 @@ class OrderController
         return $this->db->getReference($this->ordersPath . '/' . $id)->getValue();
     }
 
+    public function updateOrderStatus($id, $status, $timestamp)
+    {
+        $event = $status === 'delivered' ? 'delivered_at' : 'cancelled_at';
+        $this->db->getReference($this->ordersPath . '/' . $id)->update(['status' => $status, $event => $timestamp]);
+    }
+
     public function orderExists($id)
     {
         $snapshot = $this->db->getReference($this->ordersPath . '/' . $id)->getSnapshot();
         return $snapshot->exists();
-    }
-
-    public function deleteOrder($id)
-    {
-        $this->db->getReference($this->ordersPath . '/' . $id)->remove();
     }
 }

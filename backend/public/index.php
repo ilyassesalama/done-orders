@@ -75,8 +75,8 @@ $router->patch('/orders/([a-f0-9\-]+)', function ($id) use ($controller) {
     }
 
     $status = $_GET['status'];
-
     $allowedStatuses = ['delivered', 'cancelled'];
+    $timestamp = time() * 1000;
 
     if (!in_array($status, $allowedStatuses)) {
         ResponseUtil::error('Invalid order status.');
@@ -86,10 +86,9 @@ $router->patch('/orders/([a-f0-9\-]+)', function ($id) use ($controller) {
         ResponseUtil::error('Order not found.', 404);
     }
 
-    // just delete the order, no need to update the status, because why?
-    $controller->deleteOrder($id);
+    $controller->updateOrderStatus($id, $status, $timestamp);
 
-    ResponseUtil::json(['message' => 'Order status updated and deleted successfully.']);
+    ResponseUtil::json(['message' => 'Order status updated successfully.']);
 });
 
 
