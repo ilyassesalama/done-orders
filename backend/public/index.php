@@ -6,10 +6,13 @@ use App\Utils\ResponseUtil;
 use App\Utils\ValidationUtil;
 use Bramus\Router\Router;
 
+// Load configuration
+$config = require __DIR__ . '/../config.php';
+
 // set CORS headers (this is too strict imo, but i added this to demonstrate how cors work)
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Origin: " . $config['cors']['allowed_origin']);
+header("Access-Control-Allow-Methods: " . $config['cors']['allowed_methods']);
+header("Access-Control-Allow-Headers: " . $config['cors']['allowed_headers']);
 
 $router = new Router();
 $controller = new OrderController();
