@@ -3,7 +3,7 @@ install:
 	cd frontend && pnpm install
 
 run: check-service-account
-	cd backend && php -S localhost:8000 -t public public/index.php &
+	cd backend && composer run dev &
 	cd frontend && pnpm dev
 
 check-service-account:
