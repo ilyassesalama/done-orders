@@ -2,54 +2,35 @@
 
 namespace App\Controllers;
 
-use App\Firebase;
-use Ramsey\Uuid\Uuid;
+use App\Services\OrderService;
 
 class OrderController
 {
-    private $ordersPath = 'orders';
-    private $db;
+    private OrderService $orderService;
 
     public function __construct()
     {
-        $this->db = Firebase::db();
+        $this->orderService = new OrderService();
     }
 
-    public function createOrder($data)
+    public function createOrder(array $data): string
     {
-        $id = Uuid::uuid4();
-        $data['id'] = $id;
-        $this->db->getReference($this->ordersPath . '/' . $id)->set($data);
-        return $id;
+        return $this->orderService->createOrder($data);
     }
 
-    public function getOrders()
+    public function updateOrderStatus(string $id, string $status): void
     {
-        try {
-            $ordersData = $this->db->getReference($this->ordersPath)
-                ->orderByChild('status')
-                ->equalTo('new')
-                ->getValue();
-        } catch (\Exception $e) {
-            return [];
-        }
-        return array_values($ordersData);
+        $timestamp = time() * 1000;
+        $this->orderService->updateOrderStatus($id, $status, $timestamp);
     }
 
-    public function getOrder($id)
+    public function orderExists(string $id): bool
     {
-        return $this->db->getReference($this->ordersPath . '/' . $id)->getValue();
+        return $this->orderService->orderExists($id);
     }
 
-    public function updateOrderStatus($id, $status, $timestamp)
+    public function createNewOrder(string $title, float $totalPrice, string $image): string
     {
-        $event = $status === 'delivered' ? 'delivered_at' : 'cancelled_at';
-        $this->db->getReference($this->ordersPath . '/' . $id)->update(['status' => $status, $event => $timestamp]);
-    }
-
-    public function orderExists($id)
-    {
-        $snapshot = $this->db->getReference($this->ordersPath . '/' . $id)->getSnapshot();
-        return $snapshot->exists();
+        return $this->orderService->createNewOrder($title, $totalPrice, $image);
     }
 }

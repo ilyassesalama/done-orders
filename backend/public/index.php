@@ -2,8 +2,8 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\OrderController;
-use App\Utils\ResponseUtil;
-use App\Utils\ValidationUtil;
+use App\Helpers\ResponseHelper;
+use App\Validators\OrderValidator;
 use Bramus\Router\Router;
 
 // Load configuration
@@ -25,73 +25,38 @@ $router->options('/.*', function () {
 
 // root, hello everyone!
 $router->get('/', function () {
-    ResponseUtil::json(['message' => 'hello done!']);
-});
-
-// list all orders
-$router->get('/orders', function () use ($controller) {
-    $orders = $controller->getOrders();
-    ResponseUtil::success($orders);
+    ResponseHelper::json(['message' => 'hello done!']);
 });
 
 // create new order
 $router->post('/orders', function () use ($controller) {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $data = ResponseHelper::getJsonInput();
 
-    ValidationUtil::validateOrderFields($data); // if validation fails, this will stop here
+    OrderValidator::validateOrderFields($data); // if validation fails, this will stop here
 
-    $title = $data['title'];
-    $total_price = $data['total_price'];
-    $image = $data['image'];
-    $placed_at = time() * 1000;
-    $delivered_at = null;
-    $cancelled_at = null;
-    $status = 'new';
+    $id = $controller->createNewOrder(
+        $data['title'],
+        $data['total_price'],
+        $data['image']
+    );
 
-    $data = [
-        'title' => $title,
-        'total_price' => $total_price,
-        'image' => $image,
-        'placed_at' => $placed_at,
-        'delivered_at' => $delivered_at,
-        'cancelled_at' => $cancelled_at,
-        'status' => $status,
-    ];
-
-    $id = $controller->createOrder($data);
-    ResponseUtil::json(['id' => $id], 201);
-});
-
-// check if order exists
-$router->get('/orders/([a-f0-9\-]+)/exists', function ($id) use ($controller) { // only allow hex values, numbers and -
-    $exists = $controller->orderExists($id);
-    ResponseUtil::success(['exists' => $exists]);
+    ResponseHelper::json(['id' => $id], 201);
 });
 
 // update order status
 $router->patch('/orders/([a-f0-9\-]+)', function ($id) use ($controller) {
-    if (!isset($_GET['status'])) {
-        ResponseUtil::error('Order status is required.');
+    OrderValidator::validateStatusUpdate($_GET); // if validation fails, this will stop here
+
+    if (!$controller->orderExists($id)) {
+        ResponseHelper::error('Order not found.', 404);
     }
 
     $status = $_GET['status'];
-    $allowedStatuses = ['delivered', 'cancelled'];
-    $timestamp = time() * 1000;
 
-    if (!in_array($status, $allowedStatuses)) {
-        ResponseUtil::error('Invalid order status.');
-    }
+    $controller->updateOrderStatus($id, $status);
 
-    if (!$controller->orderExists($id)) {
-        ResponseUtil::error('Order not found.', 404);
-    }
-
-    $controller->updateOrderStatus($id, $status, $timestamp);
-
-    ResponseUtil::json(['message' => 'Order status updated successfully.']);
+    ResponseHelper::json(['message' => 'Order status updated successfully.']);
 });
-
-
 
 
 
@@ -166,7 +131,7 @@ $router->post('/orders/seed', function () use ($controller) {
             'total_price' => $totalPrice
         ];
     }
-    ResponseUtil::json([
+    ResponseHelper::json([
         'message' => "Successfully seeded {$orderCount} random food orders.",
         'orders' => $createdOrders
     ]);

@@ -11,10 +11,6 @@ const apiRequest = async (url: string, options?: RequestInit) => {
   return data
 }
 
-export const getOrders = async () => {
-  return apiRequest(API_ORDERS_URL)
-}
-
 export const createOrder = async (order: any) => {
   return apiRequest(API_ORDERS_URL, {
     method: 'POST',
