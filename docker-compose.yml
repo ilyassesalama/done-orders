@@ -13,6 +13,9 @@ services:
     restart: always
     env_file:
       - ./frontend/.env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     networks:
       - donenetwork
     ports:
@@ -25,6 +28,9 @@ services:
     restart: always
     env_file:
       - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - /app/vendor
     depends_on:
       - frontend
     ports:
