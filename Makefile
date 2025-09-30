@@ -1,7 +1,13 @@
-install:
-	cd backend && composer install
-	cd frontend && pnpm install
+build:
+	docker-compose build
 
-run:
-	cd backend && composer run dev &
-	cd frontend && pnpm dev
+up:
+	docker-compose up
+
+down:
+	docker-compose down
+
+rebuild:
+	docker-compose down
+	docker-compose build --no-cache
+	docker-compose up

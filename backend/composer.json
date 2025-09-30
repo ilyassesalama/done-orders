@@ -19,6 +19,6 @@
     }
   ],
   "scripts": {
-    "dev": "php -S localhost:8000 -t public"
+    "dev": "php -S 0.0.0.0:8000 -t public"
   }
 }
