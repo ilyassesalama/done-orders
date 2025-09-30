@@ -4,11 +4,12 @@ namespace App\Services;
 
 use App\Providers\FirebaseServiceProvider;
 use Ramsey\Uuid\Uuid;
+use Kreait\Firebase\Database;
 
 class OrderService
 {
-    private $db;
-    private $ordersPath = 'orders';
+    private Database $db;
+    private string $ordersPath = 'orders';
 
     public function __construct()
     {
