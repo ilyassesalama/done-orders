@@ -8,51 +8,28 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { getOrders, updateOrderStatus as updateOrderStatusApi } from '@/lib/api'
+import { updateOrderStatus as updateOrderStatusApi } from '@/lib/api'
+import { formatDate } from '@/lib/utils'
+import { useOrdersStore } from '@/stores/orders'
 
 import { AnimatePresence, motion } from 'motion-v'
-import { onMounted, ref } from 'vue'
-
-import { useOrdersStore } from '@/stores/orders'
-import { formatDate } from '@/lib/utils'
+import { ref } from 'vue'
 
 // icons
 import { CircleDollarSign, Clock8, Loader2, PackageCheck, PackageX } from 'lucide-vue-next'
 
 const ordersStore = useOrdersStore()
 
-const loading = ref(false)
-const error = ref<string | null>(null)
-
 const deliveredLoading = ref(new Set<string>())
 const cancelledLoading = ref(new Set<string>())
-
-// fetch orders if not already fetched
-onMounted(async () => {
-  try {
-    loading.value = true
-    await getOrders().then((orders) => {
-      ordersStore.setOrders(orders)
-    })
-  } catch (err: any) {
-    error.value = err.message ?? 'Failed to fetch orders'
-  } finally {
-    loading.value = false
-  }
-})
 
 const updateOrderStatus = async (id: string, status: string) => {
   const loadingSet = status === 'delivered' ? deliveredLoading.value : cancelledLoading.value
 
   loadingSet.add(id)
-  await updateOrderStatusApi(id, status)
-  await getOrders()
-    .then((orders) => {
-      ordersStore.setOrders(orders)
-    })
-    .finally(() => {
-      loadingSet.delete(id)
-    })
+  await updateOrderStatusApi(id, status).finally(() => {
+    loadingSet.delete(id)
+  })
 }
 </script>
 

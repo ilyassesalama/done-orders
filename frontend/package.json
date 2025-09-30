@@ -19,6 +19,7 @@
     "@vueuse/core": "^13.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "firebase": "^12.3.0",
     "lucide-vue": "^0.517.0",
     "lucide-vue-next": "^0.544.0",
     "motion-v": "^1.7.1",

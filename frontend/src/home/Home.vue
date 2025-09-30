@@ -2,9 +2,36 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AddOrder from '@/home/AddOrder.vue';
 import Orders from '@/home/Orders.vue';
-import { ref } from 'vue';
+import { db } from '@/lib/firebase';
+import { useOrdersStore } from '@/stores/orders';
+import { ref as dbRef, equalTo, onValue, orderByChild, query } from 'firebase/database';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 const activeTab = ref<'orders' | 'add-order'>('orders')
+const ordersStore = useOrdersStore()
+
+let unsubscribe: (() => void) | null = null
+
+onMounted(() => {
+  const ordersRef = dbRef(db, 'orders')
+  const ordersQuery = query(ordersRef, orderByChild('status'), equalTo('new'))
+  
+  unsubscribe = onValue(ordersQuery, (snapshot) => {
+    const data = snapshot.val()
+    if (data) {
+      const orders = Object.values(data) as any[]
+      ordersStore.setOrders(orders)
+    } else {
+      ordersStore.setOrders([])
+    }
+  })
+})
+
+onUnmounted(() => {
+  if (unsubscribe) {
+    unsubscribe()
+  }
+})
 
 const handleOrderAdded = () => {
   activeTab.value = 'orders'
