@@ -13,7 +13,7 @@ return [
     // firebase configuration
     'firebase' => [
         'database_url' => $_SERVER['FIREBASE_DATABASE_URL'] ?? '',
-        'service_account_path' => __DIR__ . '/' . ($_SERVER['FIREBASE_SERVICE_ACCOUNT_PATH'] ?? ''),
+        'service_account_json' => $_SERVER['FIREBASE_SERVICE_ACCOUNT'] ?? '',
     ],
 
     // cors configuration

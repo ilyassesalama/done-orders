@@ -39,8 +39,15 @@ class FirebaseServiceProvider
     {
         if (self::$factory === null) {
             $config = self::getConfig();
+            $serviceAccountJson = $config['firebase']['service_account_json'];
+            $serviceAccountData = json_decode($serviceAccountJson, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \RuntimeException('Invalid Firebase service account JSON: ' . json_last_error_msg());
+            }
+
             self::$factory = (new Factory)
-                ->withServiceAccount($config['firebase']['service_account_path'])
+                ->withServiceAccount($serviceAccountData)
                 ->withDatabaseUri($config['firebase']['database_url']);
         }
         return self::$factory;
