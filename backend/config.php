@@ -22,10 +22,4 @@ return [
         'allowed_methods' => 'GET, POST, PATCH, OPTIONS',
         'allowed_headers' => 'Content-Type',
     ],
-
-    // application environment
-    'app' => [
-        'env' => getenv('APP_ENV') ?: 'development',
-        'debug' => (getenv('APP_DEBUG') ?: 'true') === 'true',
-    ],
 ];
